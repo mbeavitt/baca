@@ -34,7 +34,13 @@ MAX_HEIGHT = 4096
 
 
 def get_image_type(imgname, imgdata=None):
-    return unicode_str(filetype.guess(pathof(imgname)).extension)
+    if imgdata is not None:
+        result = filetype.guess(imgdata)
+    else:
+        result = filetype.guess(pathof(imgname))
+    if result is None:
+        return None
+    return unicode_str(result.extension)
 
 def get_image_size(imgname, imgdata=None):
     '''Determine the image type of imgname (or imgdata) and return its size.
