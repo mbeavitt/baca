@@ -8,7 +8,7 @@ from .compatibility_utils import unicode_str
 
 from .unipath import pathof
 import os
-import imghdr
+import filetype
 
 import struct
 # note:  struct pack, unpack, unpack_from all require bytestring format
@@ -34,25 +34,7 @@ MAX_HEIGHT = 4096
 
 
 def get_image_type(imgname, imgdata=None):
-    imgtype = unicode_str(imghdr.what(pathof(imgname), imgdata))
-
-    # imghdr only checks for JFIF or Exif JPEG files. Apparently, there are some
-    # with only the magic JPEG bytes out there...
-    # ImageMagick handles those, so, do it too.
-    if imgtype is None:
-        if imgdata is None:
-            with open(pathof(imgname), 'rb') as f:
-                imgdata = f.read()
-        if imgdata[0:2] == b'\xFF\xD8':
-            # Get last non-null bytes
-            last = len(imgdata)
-            while (imgdata[last-1:last] == b'\x00'):
-                last-=1
-            # Be extra safe, check the trailing bytes, too.
-            if imgdata[last-2:last] == b'\xFF\xD9':
-                imgtype = "jpeg"
-    return imgtype
-
+    return unicode_str(filetype.guess(pathof(imgname)).extension)
 
 def get_image_size(imgname, imgdata=None):
     '''Determine the image type of imgname (or imgdata) and return its size.

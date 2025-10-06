@@ -21,6 +21,7 @@ appdirs = "^1.4.4"
 peewee = "^3.16.0"
 fuzzywuzzy = "^0.18.0"
 climage = "^0.2.0"
+filetype = "^1.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
